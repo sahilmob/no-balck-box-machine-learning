@@ -1,4 +1,33 @@
 import fs from "fs";
+import { createCanvas } from "canvas";
+const canvas = createCanvas(400, 400);
+
+const redraw = (path, color = "black") => {
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+  ctx.strokeStyle = color;
+  ctx.lineJoin = "round";
+  ctx.lineCap = "round";
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(path[0][0], path[0][1]);
+  for (let i = 1; i < path.length; i++) {
+    ctx.lineTo(path[i][0], path[i][1]);
+  }
+  ctx.stroke();
+};
+
+function generateImageFile(outputPath, paths) {
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  paths.forEach((path) => {
+    redraw(path);
+  });
+
+  const buffer = canvas.toBuffer("image/png");
+  fs.writeFileSync(outputPath, buffer);
+}
 
 const DATA_DIR = "../";
 const RAW_DATA_DIR = DATA_DIR + "/raw";
@@ -22,10 +51,14 @@ fileNames.forEach((fileName) => {
       student_id: session,
     });
 
+    const paths = drawings[label];
+
     fs.writeFileSync(
       JSON_DIR + "/" + id + ".json",
-      JSON.stringify(drawings[label], null, 2)
+      JSON.stringify(paths, null, 2)
     );
+
+    generateImageFile(IMG_DIR + "/" + id + ".png", paths);
   }
   id++;
 });
