@@ -19,6 +19,7 @@ export default function DataCreator() {
   const session = useRef(new Date().getTime());
   const [drawingIdx, setDrawingIdx] = useState(0);
   const drawings = useRef<Record<string, number[][][]>>({});
+  const ableToSave = drawingIdx === labels.length - 1;
 
   const nameFormSubmitHandler = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,11 +32,33 @@ export default function DataCreator() {
   };
 
   const next = (paths: number[][][]) => {
-    if (drawingIdx === labels.length) {
-      return;
-    }
     drawings.current[labels[drawingIdx]] = paths;
-    setDrawingIdx((prev) => prev + 1);
+    if (ableToSave) {
+      save();
+      return;
+    } else {
+      setDrawingIdx((prev) => prev + 1);
+    }
+  };
+
+  const save = () => {
+    const data = {
+      name,
+      session: session.current,
+      drawings: drawings.current,
+    };
+    const element = document.createElement("a");
+    element.setAttribute(
+      "href",
+      "data:text/plain;charset=utf-8," +
+        encodeURIComponent(JSON.stringify(data))
+    );
+    const filename = data.session + ".json";
+    element.setAttribute("download", filename);
+    element.style.display = "none";
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
   };
 
   return (
@@ -48,7 +71,12 @@ export default function DataCreator() {
         Data Creator
       </h1>
       {name ? (
-        <SketchPad next={next} key={drawingIdx} label={labels[drawingIdx]} />
+        <SketchPad
+          next={next}
+          key={drawingIdx}
+          ableToSave={ableToSave}
+          label={labels[drawingIdx]}
+        />
       ) : (
         <NameForm formSubmitHandler={nameFormSubmitHandler} />
       )}

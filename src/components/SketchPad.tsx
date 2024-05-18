@@ -5,8 +5,10 @@ const size = 400;
 export default function SketchPad({
   next,
   label,
+  ableToSave,
 }: {
   label: string;
+  ableToSave: boolean;
   next: (paths: number[][][]) => void;
 }) {
   const [isDrawing, setIsDrawing] = useState(false);
@@ -99,7 +101,7 @@ export default function SketchPad({
           disabled={!pathsRef.current.length}
           onClick={() => next(pathsRef.current)}
         >
-          Next
+          {ableToSave ? "Save" : "Next"}
         </button>
       </div>
       <canvas
