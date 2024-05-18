@@ -5,7 +5,9 @@ const size = 400;
 export default function SketchPad() {
   const [isDrawing, setIsDrawing] = useState(false);
   const pathsRef = useRef<number[][][]>([]);
+  const [, forceUpdate] = useState(0);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const forceRerender = () => forceUpdate((prev) => prev + 1);
 
   const getMousePos = (event: React.MouseEvent | Touch): number[] => {
     const canvas = canvasRef.current;
@@ -57,6 +59,7 @@ export default function SketchPad() {
   };
 
   const mouseDownHandler = (event: React.MouseEvent | Touch) => {
+    pathsRef.current.push([]);
     pushToPath(event);
     setIsDrawing(true);
     redrawPaths();
@@ -70,34 +73,52 @@ export default function SketchPad() {
 
   const mouseUpHandler = () => {
     setIsDrawing(false);
-    pathsRef.current.push([]);
+  };
+
+  const undoHandler = () => {
+    pathsRef.current.pop();
+    redrawPaths();
+    forceRerender();
   };
 
   return (
-    <canvas
-      ref={canvasRef}
-      width={size}
-      height={size}
-      onMouseUp={mouseUpHandler}
-      onMouseDown={mouseDownHandler}
-      onMouseMove={mouseMoveHandler}
-      onTouchStart={(event) => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        mouseDownHandler(event.touches[0]);
-      }}
-      onTouchMove={(event) => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        mouseMoveHandler(event.touches[0]);
-      }}
-      onTouchEnd={() => {
-        mouseUpHandler();
-      }}
-      style={{
-        backgroundColor: "white",
-        boxShadow: "0 0 10px 2px black",
-      }}
-    />
+    <>
+      <canvas
+        ref={canvasRef}
+        width={size}
+        height={size}
+        onMouseUp={mouseUpHandler}
+        onMouseDown={mouseDownHandler}
+        onMouseMove={mouseMoveHandler}
+        onTouchStart={(event) => {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          mouseDownHandler(event.touches[0]);
+        }}
+        onTouchMove={(event) => {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          mouseMoveHandler(event.touches[0]);
+        }}
+        onTouchEnd={() => {
+          mouseUpHandler();
+        }}
+        style={{
+          backgroundColor: "white",
+          boxShadow: "0 0 10px 2px black",
+        }}
+      />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "10px",
+        }}
+      >
+        <button disabled={pathsRef.current.length < 1} onClick={undoHandler}>
+          Undo
+        </button>
+      </div>
+    </>
   );
 }
