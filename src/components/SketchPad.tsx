@@ -2,7 +2,13 @@ import { useRef, useState } from "react";
 
 const size = 400;
 
-export default function SketchPad() {
+export default function SketchPad({
+  next,
+  label,
+}: {
+  label: string;
+  next: (paths: number[][][]) => void;
+}) {
   const [isDrawing, setIsDrawing] = useState(false);
   const pathsRef = useRef<number[][][]>([]);
   const [, forceUpdate] = useState(0);
@@ -83,6 +89,19 @@ export default function SketchPad() {
 
   return (
     <>
+      <div>Draw a {label}</div>
+      <div
+        style={{
+          marginBlock: "10px",
+        }}
+      >
+        <button
+          disabled={!pathsRef.current.length}
+          onClick={() => next(pathsRef.current)}
+        >
+          Next
+        </button>
+      </div>
       <canvas
         ref={canvasRef}
         width={size}
