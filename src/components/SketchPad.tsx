@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const size = 400;
 
@@ -89,6 +89,15 @@ export default function SketchPad({
     forceRerender();
   };
 
+  useEffect(() => {
+    document.addEventListener("mouseup", mouseUpHandler);
+    document.addEventListener("touchend", mouseUpHandler);
+    return () => {
+      document.removeEventListener("mouseup", mouseUpHandler);
+      document.removeEventListener("touchend", mouseUpHandler);
+    };
+  }, []);
+
   return (
     <>
       <div>Draw a {label}</div>
@@ -108,7 +117,6 @@ export default function SketchPad({
         ref={canvasRef}
         width={size}
         height={size}
-        onMouseUp={mouseUpHandler}
         onMouseDown={mouseDownHandler}
         onMouseMove={mouseMoveHandler}
         onTouchStart={(event) => {
@@ -120,9 +128,6 @@ export default function SketchPad({
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           mouseMoveHandler(event.touches[0]);
-        }}
-        onTouchEnd={() => {
-          mouseUpHandler();
         }}
         style={{
           backgroundColor: "white",
