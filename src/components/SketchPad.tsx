@@ -7,7 +7,7 @@ export default function SketchPad() {
   const pathsRef = useRef<number[][][]>([]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const getMousePos = (event: React.MouseEvent): number[] => {
+  const getMousePos = (event: React.MouseEvent | Touch): number[] => {
     const canvas = canvasRef.current;
     const rect = canvas!.getBoundingClientRect();
     return [
@@ -16,7 +16,7 @@ export default function SketchPad() {
     ];
   };
 
-  const pushToPath = (event: React.MouseEvent) => {
+  const pushToPath = (event: React.MouseEvent | Touch) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const mouse = getMousePos(event);
@@ -56,13 +56,13 @@ export default function SketchPad() {
     }
   };
 
-  const mouseDownHandler = (event: React.MouseEvent) => {
+  const mouseDownHandler = (event: React.MouseEvent | Touch) => {
     pushToPath(event);
     setIsDrawing(true);
     redrawPaths();
   };
 
-  const mouseMoveHandler = (event: React.MouseEvent) => {
+  const mouseMoveHandler = (event: React.MouseEvent | Touch) => {
     if (!isDrawing) return;
     pushToPath(event);
     redrawPaths();
@@ -81,6 +81,19 @@ export default function SketchPad() {
       onMouseUp={mouseUpHandler}
       onMouseDown={mouseDownHandler}
       onMouseMove={mouseMoveHandler}
+      onTouchStart={(event) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        mouseDownHandler(event.touches[0]);
+      }}
+      onTouchMove={(event) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        mouseMoveHandler(event.touches[0]);
+      }}
+      onTouchEnd={() => {
+        mouseUpHandler();
+      }}
       style={{
         backgroundColor: "white",
         boxShadow: "0 0 10px 2px black",
