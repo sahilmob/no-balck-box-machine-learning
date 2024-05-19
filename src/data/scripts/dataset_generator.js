@@ -2,7 +2,13 @@ import fs from "fs";
 import { createCanvas } from "canvas";
 
 import { printProgress } from "../../utils.js";
-import { RAW_DATA_DIR, IMG_DIR, JSON_DIR, SAMPLES } from "../../constants.js";
+import {
+  RAW_DATA_DIR,
+  IMG_DIR,
+  JSON_DIR,
+  SAMPLES,
+  SAMPLES_JS,
+} from "../../constants.js";
 
 const canvas = createCanvas(400, 400);
 
@@ -62,3 +68,8 @@ fileNames.forEach((fileName) => {
 });
 
 fs.writeFileSync(SAMPLES, JSON.stringify(samples, null, 2));
+
+fs.writeFileSync(
+  SAMPLES_JS,
+  `export const samples=${JSON.stringify(samples, null, 2)};`
+);
