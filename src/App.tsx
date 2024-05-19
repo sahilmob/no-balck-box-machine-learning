@@ -2,8 +2,8 @@ import { useState } from "react";
 
 import "./App.css";
 import Viewer from "./pages/Viewer";
+import { VIEWS } from "../public/constants.js";
 import DataCreator from "./pages/DataCreator";
-import { VIEWS } from "./constants.js";
 
 function App() {
   const [view, setView] = useState(VIEWS.DATA_CREATOR); // ['viewer', 'data-creator'

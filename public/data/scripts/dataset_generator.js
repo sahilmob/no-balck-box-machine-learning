@@ -1,7 +1,7 @@
 import fs from "fs";
 import { createCanvas } from "canvas";
 
-import { printProgress } from "../../utils.js";
+import { printProgress } from "../../../src/utils.js";
 import {
   RAW_DATA_DIR,
   IMG_DIR,

@@ -5,4 +5,13 @@ const printProgress = (count, max) => {
   process.stdout.write(`Processing: ${percentage}%`);
 };
 
-export { printProgress };
+const groupBy = (array, key) => {
+  return array.reduce((acc, obj) => {
+    const property = obj[key];
+    acc[property] = acc[property] || [];
+    acc[property].push(obj);
+    return acc;
+  }, {});
+};
+
+export { printProgress, groupBy };
