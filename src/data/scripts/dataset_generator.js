@@ -1,5 +1,7 @@
 import fs from "fs";
 import { createCanvas } from "canvas";
+import { RAW_DATA_DIR, IMG_DIR, JSON_DIR, SAMPLES } from "../../constants.js";
+
 const canvas = createCanvas(400, 400);
 
 const redraw = (path, color = "black") => {
@@ -28,13 +30,6 @@ function generateImageFile(outputPath, paths) {
   const buffer = canvas.toBuffer("image/png");
   fs.writeFileSync(outputPath, buffer);
 }
-
-const DATA_DIR = "../";
-const RAW_DATA_DIR = DATA_DIR + "/raw";
-const DATASET_DIR = DATA_DIR + "/dataset";
-const JSON_DIR = DATASET_DIR + "/json";
-const IMG_DIR = DATASET_DIR + "/img";
-const SAMPLES = DATASET_DIR + "/samples.json";
 
 const fileNames = fs.readdirSync(RAW_DATA_DIR);
 const samples = [];
