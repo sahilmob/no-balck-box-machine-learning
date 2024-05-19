@@ -6,19 +6,38 @@ const groupedSamples = groupBy(samples, "student_id");
 export default function Viewer() {
   return (
     <div>
-      {Object.keys(groupedSamples).map((studentId) => {
+      {Object.keys(groupedSamples).map((studentId, idx) => {
         const studentSamples = groupedSamples[studentId];
         const studentName = studentSamples[0].student_name;
         return (
           <div key={studentId}>
             <h3>{studentName}</h3>
-            <div key={studentId}>
+            <div
+              key={studentId}
+              style={{
+                display: "flex",
+                gap: "10px",
+              }}
+            >
               {studentSamples.map(({ id, label }) => {
                 return (
-                  <div key={id + label}>
+                  <div
+                    style={{
+                      padding: "10px",
+                      backgroundColor: "white",
+                      textAlign: "center",
+                      borderRadius: "10px",
+                    }}
+                    key={id + label}
+                  >
+                    <div>{label}</div>
                     <img
                       alt={label}
-                      className="thumb"
+                      style={{
+                        width: "100%",
+                        display: "block",
+                        margin: "auto",
+                      }}
                       src={"../public/data/dataset/img/" + id + ".png"}
                     />
                   </div>
