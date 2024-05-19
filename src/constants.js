@@ -7,6 +7,11 @@ const SAMPLES = DATASET_DIR + "/samples.json";
 const JS_OBJECTS = "../../js_objects";
 const SAMPLES_JS = JS_OBJECTS + "/samples.js";
 
+const VIEWS = {
+  VIEWER: "viewer",
+  DATA_CREATOR: "data-creator",
+};
+
 export {
   DATA_DIR,
   RAW_DATA_DIR,
@@ -16,4 +21,5 @@ export {
   SAMPLES,
   JS_OBJECTS,
   SAMPLES_JS,
+  VIEWS,
 };
