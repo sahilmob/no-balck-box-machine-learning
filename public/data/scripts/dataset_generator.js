@@ -62,9 +62,9 @@ fileNames.forEach((fileName) => {
     );
 
     generateImageFile(IMG_DIR + "/" + id + ".png", paths);
+    id++;
   }
   printProgress(id, fileNames.length);
-  id++;
 });
 
 fs.writeFileSync(SAMPLES, JSON.stringify(samples, null, 2));
