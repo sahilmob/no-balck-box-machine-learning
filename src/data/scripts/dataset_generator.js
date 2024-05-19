@@ -1,5 +1,7 @@
 import fs from "fs";
 import { createCanvas } from "canvas";
+
+import { printProgress } from "../../utils.js";
 import { RAW_DATA_DIR, IMG_DIR, JSON_DIR, SAMPLES } from "../../constants.js";
 
 const canvas = createCanvas(400, 400);
@@ -55,6 +57,7 @@ fileNames.forEach((fileName) => {
 
     generateImageFile(IMG_DIR + "/" + id + ".png", paths);
   }
+  printProgress(id, fileNames.length);
   id++;
 });
 
