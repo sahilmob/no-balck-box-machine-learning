@@ -36,3 +36,14 @@ button:disabled:hover {
   background-color: gray;
   cursor: default;
 }
+
+.selected {
+  background-color: yellow !important;
+}
+
+#chartContainer {
+  position: fixed !important;
+  right: 0 !important;
+  top: 50% !important;
+  transform: translate(0, -50%);
+}
